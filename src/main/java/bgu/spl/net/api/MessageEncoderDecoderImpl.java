@@ -36,6 +36,7 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
     private String popString() {
         String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
         len = 0;
+        opCode = 0;
         return result;
     }
 
