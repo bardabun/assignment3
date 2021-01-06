@@ -1,6 +1,7 @@
 package bgu.spl.net.impl.BGRS.messages.BasicMessage;
 
 import bgu.spl.net.api.MessagingProtocol;
+import bgu.spl.net.api.MessagingProtocolImpl;
 import bgu.spl.net.impl.BGRS.Database;
 import sun.plugin2.message.Message;
 

@@ -26,7 +26,7 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
         if (opCode >= 1 & opCode <= 3 & numOfZeros == 3)
             return popString();
             //between 5 to 10 (not include 8)
-        else if (len==4 && (opCode >= 5 & opCode <= 10 & opCode != 8 ))
+        else if ((opCode >= 5 & opCode <= 10 & opCode != 8 & len == 4))
             return popString();
 
         else if (opCode == 8 & numOfZeros == 2)
