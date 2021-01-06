@@ -1,4 +1,4 @@
-package bgu.spl.net.impl.messages;
+package bgu.spl.net.impl.BGRS.messages;
 
 public class CheckMyCurrentCourses {
 }
