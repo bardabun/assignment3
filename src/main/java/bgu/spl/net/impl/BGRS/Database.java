@@ -2,7 +2,9 @@ package bgu.spl.net.impl.BGRS;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
      * Passive object representing the Database where all courses and users are stored.
@@ -14,10 +16,16 @@ import java.util.Scanner;
      */
     public class Database {
 
+        private HashMap<Integer, Course> courseHashMap;
+        private ConcurrentHashMap <String, User> userConcurrentHashMap;
 
         //to prevent user from creating new Database
         private Database() {
             // TODO: implement
+            courseHashMap = new HashMap<>();
+            userConcurrentHashMap=new ConcurrentHashMap<>();
+
+            initialize("Courses.txt");
 
         }
         private static class SingletonHolder {
@@ -50,5 +58,37 @@ import java.util.Scanner;
         }
 
 
+        public boolean addUser(String user, String pass, boolean isAdmin) {
+            if (userConcurrentHashMap.containsKey(user)){
+                return  false;
+        }
+            else{
+
+                if( isAdmin) {
+                    User admin = new User(user, pass, true);
+                    userConcurrentHashMap.put(user, admin);
+                    return true;
+                }
+                else //not admin
+                {
+                    User user1 = new User(user,pass,false);
+                    userConcurrentHashMap.put(user, user1);
+                    return true;
+                }
+            }
     }
+
+    public boolean Login(String user, String pass){
+            User login = userConcurrentHashMap.get(user);
+            if(login == null || login.isLoggedIn() | !(login.getPassword().equals(pass)) ){
+                //mo such username || already logged in | password is not correct
+                return  false;
+            }
+            else
+            {
+                login.LogIn();
+                return true;
+            }
+    }
+
 }
