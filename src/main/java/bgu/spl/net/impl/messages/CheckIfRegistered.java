@@ -1,4 +1,4 @@
-package messages;
+package bgu.spl.net.impl.messages;
 
 public class CheckIfRegistered {
 }

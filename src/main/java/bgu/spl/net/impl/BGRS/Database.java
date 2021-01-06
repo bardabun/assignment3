@@ -1,6 +1,10 @@
-package bgu.spl.net;
+package bgu.spl.net.impl.BGRS;
 
-    /**
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+/**
      * Passive object representing the Database where all courses and users are stored.
      * <p>
      * This class must be implemented safely as a thread-safe singleton.
@@ -14,6 +18,7 @@ package bgu.spl.net;
         //to prevent user from creating new Database
         private Database() {
             // TODO: implement
+
         }
         private static class SingletonHolder {
             private static Database instance = new Database();
@@ -31,6 +36,16 @@ package bgu.spl.net;
          */
         boolean initialize(String coursesFilePath) {
             // TODO: implement
+            try {
+                File courseFile = new File(coursesFilePath);
+                Scanner reader = new Scanner(courseFile);
+                while (reader.hasNextLine()) {
+                    String line = reader.nextLine();
+
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
             return false;
         }
 
