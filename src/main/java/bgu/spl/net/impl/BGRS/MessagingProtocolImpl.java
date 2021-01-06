@@ -1,4 +1,5 @@
-package bgu.spl.net.api;
+package bgu.spl.net.impl.BGRS;
+import bgu.spl.net.api.MessagingProtocol;
 
 public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
     private boolean shouldTerminate = false;

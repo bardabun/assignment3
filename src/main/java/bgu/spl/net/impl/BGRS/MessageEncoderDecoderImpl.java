@@ -1,4 +1,6 @@
-package bgu.spl.net.api;
+package bgu.spl.net.impl.BGRS;
+
+import bgu.spl.net.api.MessageEncoderDecoder;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;

@@ -91,4 +91,17 @@ import java.util.concurrent.ConcurrentHashMap;
             }
     }
 
+    public boolean Logout(String user){
+            User logout = userConcurrentHashMap.get(user);
+            if(logout ==null || !(logout.isLoggedIn()) ){
+                //no such username || not logged in ..
+                return false;
+            }
+            else
+            {
+                logout.LogOut();
+                return true;
+            }
+    }
+
 }
