@@ -60,10 +60,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
         public boolean addUser(String user, String pass, boolean isAdmin) {
             if (userConcurrentHashMap.containsKey(user)){
+                //username already exists
                 return  false;
-        }
+             }
             else{
-
                 if( isAdmin) {
                     User admin = new User(user, pass, true);
                     userConcurrentHashMap.put(user, admin);
@@ -102,6 +102,15 @@ import java.util.concurrent.ConcurrentHashMap;
                 logout.LogOut();
                 return true;
             }
+    }
+    public boolean CourseRegister(String user, Integer courseNum){
+        User userReg = userConcurrentHashMap.get(user);
+        Course toRegister = courseHashMap.get(courseNum);
+        if(userReg== null || userReg.getIsAdmin())return false;
+        //user isn't exist or admin can't register to a course
+        if(!userReg.isLoggedIn())return false; //the user is not connected
+        if(toRegister==null)return false; //no such course is exist
+
     }
 
 }

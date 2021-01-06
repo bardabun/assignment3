@@ -3,7 +3,7 @@ package bgu.spl.net.impl.BGRS;
 public class User {
     final private String username;
     final private String password;
-     private boolean isAdmin;
+    private boolean isAdmin;
     private boolean isLoggedIn;
 
     public User(String username, String password, boolean isAdmin) {
@@ -26,5 +26,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public boolean getIsAdmin() {
+        return isAdmin;
     }
 }
