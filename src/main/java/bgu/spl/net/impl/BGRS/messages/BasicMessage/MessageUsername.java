@@ -9,6 +9,6 @@ public abstract class MessageUsername {
         this.userName=user;
     }
 
-    public abstract boolean execute();
+    public abstract String execute();
 
 }

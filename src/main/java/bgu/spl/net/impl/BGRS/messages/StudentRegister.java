@@ -4,14 +4,17 @@ import bgu.spl.net.impl.BGRS.Database;
 import bgu.spl.net.impl.BGRS.messages.BasicMessage.MessageUsernamePassword;
 
 public class StudentRegister extends MessageUsernamePassword {
-
+    private int opCode;
     public StudentRegister(String userName, String password) {
         super(userName, password);
-        //opcode = 2;
+        opCode = 2;
     }
 
     @Override
-    public boolean execute() {
-        return DB.addUser(userName, pass, false);
+    public String execute() {
+         if(DB.addUser(userName, pass, false))
+             return new Acknowledgement(opCode).execute();
+         else
+             return new Error(opCode).execute();
     }
 }
