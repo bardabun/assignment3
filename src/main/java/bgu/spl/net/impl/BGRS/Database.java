@@ -4,6 +4,7 @@ import bgu.spl.net.impl.BGRS.messages.Acknowledgement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
@@ -20,112 +21,107 @@ import java.util.function.DoubleToIntFunction;
      */
     public class Database {
 
-        private HashMap<Integer, Course> courseHashMap; //number course to course
+    private HashMap<Integer, Course> courseHashMap; //number course to course
 
-        private ConcurrentHashMap <String, User> userConcurrentHashMap; // username to user
+    private ConcurrentHashMap<String, User> userConcurrentHashMap; // username to user
 
-        //to prevent user from creating new Database
-        private Database() {
-            // TODO: implement
-            courseHashMap = new HashMap<>();
-            userConcurrentHashMap=new ConcurrentHashMap<>();
+    //to prevent user from creating new Database
+    private Database() {
 
-            initialize("Courses.txt");
+        courseHashMap = new HashMap<>();
+        userConcurrentHashMap = new ConcurrentHashMap<>();
 
-        }
+        initialize("Courses.txt");
+
+    }
 
 
     private static class SingletonHolder {
-            private static Database instance = new Database();
-        }
+        private static Database instance = new Database();
+    }
 
-        /**
-         * Retrieves the single instance of this class.
-         */
-        public static Database getInstance() {
-            return SingletonHolder.instance;        }
+    /**
+     * Retrieves the single instance of this class.
+     */
+    public static Database getInstance() {
+        return SingletonHolder.instance;
+    }
 
-        /**
-         * loades the courses from the file path specified
-         * into the Database, returns true if successful.
-         */
-        boolean initialize(String coursesFilePath) {
-            // TODO: implement
-            try {
-                File courseFile = new File(coursesFilePath);
-                Scanner reader = new Scanner(courseFile);
-                while (reader.hasNextLine()) {
-                    String line = reader.nextLine();
+    /**
+     * loades the courses from the file path specified
+     * into the Database, returns true if successful.
+     */
+    boolean initialize(String coursesFilePath) {
 
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+        try {
+            File courseFile = new File(coursesFilePath);
+            Scanner reader = new Scanner(courseFile);
+            while (reader.hasNextLine()) {
+                String line = reader.nextLine();
+
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public boolean addUser(String user, String pass, boolean isAdmin) {
+        if (userConcurrentHashMap.containsKey(user)) {
+            //username already exists
             return false;
+        } else {
+            if (isAdmin) {
+                User admin = new User(user, pass, true);
+                userConcurrentHashMap.put(user, admin);
+                return true;
+            } else //not admin
+            {
+                User user1 = new User(user, pass, false);
+                userConcurrentHashMap.put(user, user1);
+                return true;
+            }
         }
-
-
-        public boolean addUser(String user, String pass, boolean isAdmin) {
-            if (userConcurrentHashMap.containsKey(user)){
-                //username already exists
-                return  false;
-             }
-            else{
-                if( isAdmin) {
-                    User admin = new User(user, pass, true);
-                    userConcurrentHashMap.put(user, admin);
-                    return true;
-                }
-                else //not admin
-                {
-                    User user1 = new User(user,pass,false);
-                    userConcurrentHashMap.put(user, user1);
-                    return true;
-                }
-            }
     }
 
-    public boolean Login(String user, String pass){
-            User login = userConcurrentHashMap.get(user);
-            if(login == null || login.isLoggedIn() | !(login.getPassword().equals(pass)) ){
-                //mo such username || already logged in | password is not correct
-                return  false;
-            }
-            else
-            {
-                login.LogIn();
-                return true;
-            }
+    public boolean Login(String user, String pass) {
+        User login = userConcurrentHashMap.get(user);
+        if (login == null || login.isLoggedIn() | !(login.getPassword().equals(pass))) {
+            //mo such username || already logged in | password is not correct
+            return false;
+        } else {
+            login.LogIn();
+            return true;
+        }
     }
 
-    public boolean Logout(String user){
-            User logout = userConcurrentHashMap.get(user);
-            if(logout ==null || !(logout.isLoggedIn()) ){
-                //no such username || not logged in ..
-                return false;
-            }
-            else
-            {
-                logout.LogOut();
-                return true;
-            }
+    public boolean Logout(String user) {
+        User logout = userConcurrentHashMap.get(user);
+        if (logout == null || !(logout.isLoggedIn())) {
+            //no such username || not logged in ..
+            return false;
+        } else {
+            logout.LogOut();
+            return true;
+        }
     }
-    public boolean CourseRegister(String user, Integer courseNum){
+
+    public boolean CourseRegister(String user, Integer courseNum) {
         User userReg = userConcurrentHashMap.get(user);
         Course toRegister = courseHashMap.get(courseNum);
-        if(userReg== null || userReg.getIsAdmin())return false;
+        if (userReg == null || userReg.getIsAdmin()) return false;
         //user isn't exist or admin can't register to a course
-        if(!userReg.isLoggedIn())return false; //the user is not logged in
-        if(toRegister==null)return false; //no such course is exist
-        if(isFull(toRegister))return false; //there's no place in the course.
-        if( ! hasFinishedKdam(userReg,toRegister)) return false; //the student does not have all the Kdam courses
+        if (!userReg.isLoggedIn()) return false; //the user is not logged in
+        if (toRegister == null) return false; //no such course is exist
+        if (isFull(toRegister)) return false; //there's no place in the course.
+        if (!hasFinishedKdam(userReg, toRegister)) return false; //the student does not have all the Kdam courses
 
-        int numOfStudentRegistered = toRegister.getStudentsRegistered();
+        int numOfStudentRegistered = toRegister.getNumRegistered();
         numOfStudentRegistered++;
-        toRegister.setStudentsRegistered(numOfStudentRegistered);
+        toRegister.setNumRegistered(numOfStudentRegistered);
         toRegister.addUser(userReg);
         userReg.getKdamCoursesList().add(courseNum); //register to the course
-
 
 
         return true;
@@ -133,27 +129,28 @@ import java.util.function.DoubleToIntFunction;
 
     private boolean hasFinishedKdam(User userReg, Course toRegister) {
         Vector<Integer> userKdamCourses = userReg.getKdamCoursesList();
-        for(Integer i: toRegister.getKdamCoursesList()){ //go throw the kdam courses for the specific course
-            if(!userKdamCourses.contains(i))
+        for (Integer i : toRegister.getKdamCoursesList()) { //go throw the kdam courses for the specific course
+            if (!userKdamCourses.contains(i))
                 return false;
         }
         return true;
     }
 
     private boolean isFull(Course toRegister) {
-            return (toRegister.getNumOfMaxStudents() - toRegister.getStudentsRegistered() == 0 ) ;
+        return (toRegister.getNumOfMaxStudents() - toRegister.getNumRegistered() == 0);
     }
 
     //Return true if removed user registration from specific course
-    public boolean unregisterToCourse(String username, int courseNumber){
-            User user = userConcurrentHashMap.get(username);
-            if(courseHashMap.get(courseNumber) != null | !user.getIsAdmin()){
-                Integer removedCourse = user.getKdamCoursesList().remove(courseNumber);
-                Vector<User> listOfStudents = courseHashMap.get(courseNumber).getListOfStudents();
-                return removedCourse.equals(courseNumber) & listOfStudents.remove(user);
-            }
-            return false;
+    public boolean unregisterToCourse(String username, int courseNumber) {
+        User user = userConcurrentHashMap.get(username);
+        if (courseHashMap.get(courseNumber) != null | !user.getIsAdmin()) {
+            Integer removedCourse = user.getKdamCoursesList().remove(courseNumber);
+            Vector<User> listOfStudents = courseHashMap.get(courseNumber).getListOfStudents();
+            return removedCourse.equals(courseNumber) & listOfStudents.remove(user);
+        }
+        return false;
     }
+
     //Return user's course list
     public String CheckMyCurrentCourses(String username) {
         return userConcurrentHashMap.get(username).getKdamCoursesList().toString();
@@ -163,22 +160,44 @@ import java.util.function.DoubleToIntFunction;
     public String kdamCheck(String userName) {
         User user = userConcurrentHashMap.get(userName);
         String output = null;
-        if(!user.getIsAdmin()) { //only student
-                output =  user.getKdamCoursesList().toString();
+        if (!user.getIsAdmin()) { //only for students
+            output = user.getKdamCoursesList().toString();
+        }
+        return output;
+    }
+
+    public String CourseStats(String userName, int courseNumber) {
+        String output = null;
+        User user = userConcurrentHashMap.get(userName);
+        if (user.getIsAdmin()) { // only for admins
+            Course course = courseHashMap.get(courseNumber);
+            if (course != null) { //course is not exists
+                output += "Course:" + "(" + course.getCourseNum() + ")" + course.getCourseName() + "\n";
+                int numOfseatsAvailable = course.getNumOfMaxStudents() - course.getNumRegistered();
+                output += "Seats Available:" + numOfseatsAvailable + "/" + course.getNumOfMaxStudents() + "\n";
+                Vector<String> usersName = new Vector<>();
+                for (User u : course.getListOfStudents())
+                    usersName.add(u.getUsername());
+                Collections.sort(usersName);
+                output += "Students Registered: " + userName;
             }
-            return output;s
+        }
+        return output;
     }
 
     public String isRegistered(String username, int courseNumber) {
-            if (courseHashMap.get(courseNumber) != null | !userConcurrentHashMap.get(username).getIsAdmin()){
-                Vector<Integer> courseList = userConcurrentHashMap.get(username).getKdamCoursesList();
-                boolean isRegistered = courseList.contains(courseNumber);
-                if(isRegistered){
-                    courseList.remove(courseNumber);
-                    return "REGISTERED";
-                }
-                else {return "NOT REGISTERED";}
+        if (courseHashMap.get(courseNumber) != null | !userConcurrentHashMap.get(username).getIsAdmin()) {
+            Vector<Integer> courseList = userConcurrentHashMap.get(username).getKdamCoursesList();
+            boolean isRegistered = courseList.contains(courseNumber);
+            if (isRegistered) {
+                courseList.remove(courseNumber);
+                return "REGISTERED";
+            } else {
+                return "NOT REGISTERED";
             }
-            else{ return "ERR";}
+        } else {
+            return "ERR";
+        }
     }
 }
+

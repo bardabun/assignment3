@@ -33,11 +33,11 @@ public class Course {
         return KdamCoursesList;
     }
 
-    public int getStudentsRegistered() {
+    public int getNumRegistered() {
         return numRegistered;
     }
 
-    public void setStudentsRegistered(int studentsRegistered) {
+    public void setNumRegistered(int studentsRegistered) {
         this.numRegistered = studentsRegistered;
     }
 
@@ -47,5 +47,9 @@ public class Course {
 
     public void addUser(User user) {
         listOfStudents.add(user);
+    }
+
+    public String getCourseName() {
+        return courseName;
     }
 }
