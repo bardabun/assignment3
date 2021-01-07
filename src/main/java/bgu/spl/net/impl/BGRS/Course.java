@@ -30,4 +30,8 @@ public class Course {
     public int getStudentsRegistered() {
         return studentsRegistered;
     }
+
+    public Vector<Integer> getKdamCoursesList() {
+        return KdamCoursesList;
+    }
 }

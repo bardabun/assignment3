@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -65,13 +66,13 @@ import java.util.concurrent.ConcurrentHashMap;
              }
             else{
                 if( isAdmin) {
-                    User admin = new User(user, pass, true);
+                    User admin = new User(user, pass, true, kdamCoursesList);
                     userConcurrentHashMap.put(user, admin);
                     return true;
                 }
                 else //not admin
                 {
-                    User user1 = new User(user,pass,false);
+                    User user1 = new User(user,pass,false, kdamCoursesList);
                     userConcurrentHashMap.put(user, user1);
                     return true;
                 }
@@ -108,12 +109,20 @@ import java.util.concurrent.ConcurrentHashMap;
         Course toRegister = courseHashMap.get(courseNum);
         if(userReg== null || userReg.getIsAdmin())return false;
         //user isn't exist or admin can't register to a course
-        if(!userReg.isLoggedIn())return false; //the user is not connected
+        if(!userReg.isLoggedIn())return false; //the user is not logged in
         if(toRegister==null)return false; //no such course is exist
         if(isFull(toRegister))return false; //there's no place in the course.
+        if( ! hasFinishedKdam(userReg,toRegister)) return false;
 
 
+    }
 
+    private boolean hasFinishedKdam(User userReg, Course toRegister) {
+        Vector<Integer> kdamCourses = userReg.getKdamCoursesList();
+        for(Integer i: toRegister.getKdamCoursesList()){
+            if(kdamCourses)
+
+        }
     }
 
     private boolean isFull(Course toRegister) {

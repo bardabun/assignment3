@@ -1,15 +1,19 @@
 package bgu.spl.net.impl.BGRS;
 
+import java.util.Vector;
+
 public class User {
     final private String username;
     final private String password;
     private boolean isAdmin;
     private boolean isLoggedIn;
+    private Vector<Integer> KdamCoursesList;
 
     public User(String username, String password, boolean isAdmin) {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
+        this.KdamCoursesList=new Vector<>();
         this.isLoggedIn = false;
     }
 
@@ -30,5 +34,9 @@ public class User {
 
     public boolean getIsAdmin() {
         return isAdmin;
+    }
+
+    public Vector<Integer> getKdamCoursesList() {
+        return KdamCoursesList;
     }
 }
