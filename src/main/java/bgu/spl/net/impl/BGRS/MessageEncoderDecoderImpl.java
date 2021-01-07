@@ -60,6 +60,7 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
 
     @Override
     public byte[] encode(String message) {
-        return new byte[0];
+
+        return (message + "\0").getBytes();
     }
 }

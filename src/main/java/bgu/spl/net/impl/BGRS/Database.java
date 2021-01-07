@@ -1,5 +1,7 @@
 package bgu.spl.net.impl.BGRS;
 
+import bgu.spl.net.impl.BGRS.messages.Acknowledgement;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
     public class Database {
 
         private HashMap<Integer, Course> courseHashMap; //number course to course
+
         private ConcurrentHashMap <String, User> userConcurrentHashMap; // username to user
 
         //to prevent user from creating new Database
@@ -29,7 +32,9 @@ import java.util.concurrent.ConcurrentHashMap;
             initialize("Courses.txt");
 
         }
-        private static class SingletonHolder {
+
+
+    private static class SingletonHolder {
             private static Database instance = new Database();
         }
 
@@ -118,7 +123,7 @@ import java.util.concurrent.ConcurrentHashMap;
         numOfStudentRegistered++;
         toRegister.setStudentsRegistered(numOfStudentRegistered);
         userReg.getKdamCoursesList().add(courseNum); //register to the course
-
+    return true;
     }
 
     private boolean hasFinishedKdam(User userReg, Course toRegister) {
@@ -132,6 +137,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
     private boolean isFull(Course toRegister) {
             return (toRegister.getNumOfMaxStudents() - toRegister.getStudentsRegistered() == 0 ) ;
+    }
+    //Return true if removed user registration from specific course
+    public boolean unregisterToCourse(String username, int courseNumber){
+            User user = userConcurrentHashMap.get(username);
+            if(!user.getIsAdmin()){
+                Integer removed = user.getKdamCoursesList().remove(courseNumber);
+                return removed .equals(courseNumber);
+            }
+            return false;
+    }
+    //Return user's course list
+    public String CheckMyCurrentCourses(String username) {
+        return userConcurrentHashMap.get(username).getKdamCoursesList().toString();
     }
 
 }
