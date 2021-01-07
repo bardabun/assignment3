@@ -1,19 +1,15 @@
 package bgu.spl.net.impl.BGRS.messages;
 
-import bgu.spl.net.impl.BGRS.Database;
-import bgu.spl.net.impl.BGRS.User;
+import bgu.spl.net.impl.BGRS.messages.BasicMessage.MessageUsername;
 
-public class CheckMyCurrentCourses {
-    private String username;
-    private int opCode;
-    private Database DB = Database.getInstance();
+public class CheckMyCurrentCourses extends MessageUsername {
 
     public CheckMyCurrentCourses(String username) {
-        this.username = username;
-        this.opCode = 11;
+        super(username);
+        this.opcode = 11;
     }
 
     public String execute() {
-        return DB.CheckMyCurrentCourses(username);
+        return new Acknowledgement(opcode, DB.CheckMyCurrentCourses(userName)).execute();
     }
 }
