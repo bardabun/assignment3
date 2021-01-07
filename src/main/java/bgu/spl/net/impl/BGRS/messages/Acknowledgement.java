@@ -4,9 +4,6 @@ public class Acknowledgement {
     private int opCode;
     private String message = "ACK ";
 
-    public Acknowledgement(){
-        this.opCode = 0;
-    }
 
     public Acknowledgement(int opCode){
         this.opCode = opCode;
@@ -19,6 +16,6 @@ public class Acknowledgement {
     }
 
     public String execute(){
-        return opCode != 0 ? message + opCode : message;
+        return  message + opCode;
     }
 }

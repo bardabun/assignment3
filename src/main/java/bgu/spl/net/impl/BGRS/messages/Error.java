@@ -3,9 +3,7 @@ package bgu.spl.net.impl.BGRS.messages;
 public class Error {
     private int opCode;
 
-    public Error(){
-        this.opCode = 0;
-    } //why do we need this ?
+
     public Error(int opCode){
         this.opCode = opCode;
     }
@@ -15,6 +13,6 @@ public class Error {
     }
 
     public String execute(){
-        return opCode != 0 ? "ERROR " + opCode : "ERROR";
+        return  "ERROR " + opCode;
     }
 }

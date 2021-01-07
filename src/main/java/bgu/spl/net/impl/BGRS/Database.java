@@ -123,8 +123,12 @@ import java.util.function.DoubleToIntFunction;
         int numOfStudentRegistered = toRegister.getStudentsRegistered();
         numOfStudentRegistered++;
         toRegister.setStudentsRegistered(numOfStudentRegistered);
+        toRegister.addUser(userReg);
         userReg.getKdamCoursesList().add(courseNum); //register to the course
 
+
+
+        return true;
     }
 
     private boolean hasFinishedKdam(User userReg, Course toRegister) {
@@ -140,6 +144,27 @@ import java.util.function.DoubleToIntFunction;
             return (toRegister.getNumOfMaxStudents() - toRegister.getStudentsRegistered() == 0 ) ;
     }
 
+    //Return true if removed user registration from specific course
+    public boolean unregisterToCourse(String username, int courseNumber){
+            User user = userConcurrentHashMap.get(username);
+            if(!user.getIsAdmin()){
+                Integer removed = user.getKdamCoursesList().remove(courseNumber);
+                return removed .equals(courseNumber);
+            }
+            return false;
+    }
+    //Return user's course list
+    public String CheckMyCurrentCourses(String username) {
+        return userConcurrentHashMap.get(username).getKdamCoursesList().toString();
+    }
 
+
+    public String kdamCheck(String userName) {
+        User user = userConcurrentHashMap.get(userName);
+        String output = null;
+        if(!user.getIsAdmin()) { //only student
+                output =  user.getKdamCoursesList().toString();
+            }
+            return output;
     }
 }

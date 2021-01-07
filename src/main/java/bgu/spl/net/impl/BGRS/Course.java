@@ -7,16 +7,16 @@ public class Course {
     private String courseName;
     private Vector<Integer> KdamCoursesList;
     private int numOfMaxStudents;
-    private int studentsRegistered;
-
+    private int numRegistered;
+    private Vector<User> listOfStudents;
 
     public Course(int courseNum, String courseName, Vector<Integer> kdamCoursesList, int numOfMaxStudents, int studentsRegistered) {
         this.courseNum = courseNum;
         this.courseName = courseName;
         KdamCoursesList = kdamCoursesList;
         this.numOfMaxStudents = numOfMaxStudents;
-
-        this.studentsRegistered = studentsRegistered;
+        listOfStudents=new Vector<>();
+        this.numRegistered = studentsRegistered;
     }
 
     public int getNumOfMaxStudents() {
@@ -34,10 +34,18 @@ public class Course {
     }
 
     public int getStudentsRegistered() {
-        return studentsRegistered;
+        return numRegistered;
     }
 
     public void setStudentsRegistered(int studentsRegistered) {
-        this.studentsRegistered = studentsRegistered;
+        this.numRegistered = studentsRegistered;
+    }
+
+    public Vector<User> getListOfStudents() {
+        return listOfStudents;
+    }
+
+    public void addUser(User user) {
+        listOfStudents.add(user);
     }
 }

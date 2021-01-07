@@ -13,7 +13,7 @@ public class CheckKdamCourse extends MessageUsername {
     public String execute() {
         String output = DB.kdamCheck(userName);
         if(output!=null)
-            return new Acknowledgement(opcode).execute() + "/n" + output;
+            return new Acknowledgement(opcode,output).execute();
         else
             return new Error(opcode).execute();
 

@@ -39,4 +39,8 @@ public class User {
     public Vector<Integer> getKdamCoursesList() {
         return KdamCoursesList;
     }
+
+    public String getUsername() {
+        return username;
+    }
 }
