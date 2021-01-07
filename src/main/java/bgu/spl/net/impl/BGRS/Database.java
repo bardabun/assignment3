@@ -16,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
      */
     public class Database {
 
-        private HashMap<Integer, Course> courseHashMap;
-        private ConcurrentHashMap <String, User> userConcurrentHashMap;
+        private HashMap<Integer, Course> courseHashMap; //number course to course
+        private ConcurrentHashMap <String, User> userConcurrentHashMap; // username to user
 
         //to prevent user from creating new Database
         private Database() {
@@ -110,9 +110,14 @@ import java.util.concurrent.ConcurrentHashMap;
         //user isn't exist or admin can't register to a course
         if(!userReg.isLoggedIn())return false; //the user is not connected
         if(toRegister==null)return false; //no such course is exist
+        if(isFull(toRegister))return false; //there's no place in the course.
 
 
 
+    }
+
+    private boolean isFull(Course toRegister) {
+            return (toRegister.getNumOfMaxStudents() - toRegister.getStudentsRegistered() == 0 ) ;
     }
 
 }
