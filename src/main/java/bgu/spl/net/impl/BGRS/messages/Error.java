@@ -8,9 +8,6 @@ public class Error {
         this.opCode = opCode;
     }
 
-    public void setOpCode(int opCode) {
-        this.opCode = opCode;
-    }
 
     public String execute(){
         return  "ERROR " + opCode;

@@ -11,6 +11,9 @@ public class PrintCourseStatus extends MessageUsernameCourseumber {
     @Override
     public String execute() {
         String output = DB.CourseStats(userName,courseNumber);
-        return null;
+        if(output!=null)
+            return new Acknowledgement(opcode,output).execute();
+        else
+            return new Error(opcode).execute();
     }
 }

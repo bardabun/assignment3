@@ -164,15 +164,15 @@ import java.util.function.DoubleToIntFunction;
         return null;
     }
 
-    public String CourseStats(String userName, int courseNumber) {
+    public String CourseStats(String userName, int courseNumber) { // message 7
         String output = null;
         User user = userConcurrentHashMap.get(userName);
         if (user.getIsAdmin()) { // only for admins
             Course course = courseHashMap.get(courseNumber);
             if (course != null) { //course is not exists
-                output += "Course:" + "(" + course.getCourseNum() + ")" + course.getCourseName() + "\n";
-                int numOfseatsAvailable = course.getNumOfMaxStudents() - course.getNumRegistered();
-                output += "Seats Available:" + numOfseatsAvailable + "/" + course.getNumOfMaxStudents() + "\n";
+                output = "Course:" + "(" + course.getCourseNum() + ")" + course.getCourseName() + "\n";
+                int numOfSeatsAvailable = course.getNumOfMaxStudents() - course.getNumRegistered();
+                output += "Seats Available:" + numOfSeatsAvailable + "/" + course.getNumOfMaxStudents() + "\n";
                 Vector<String> usersName = new Vector<>();
                 for (User u : course.getListOfStudents())
                     usersName.add(u.getUsername());
@@ -183,7 +183,7 @@ import java.util.function.DoubleToIntFunction;
         return output;
     }
 
-    public String isRegistered(String username, int courseNumber) {
+    public String isRegistered(String username, int courseNumber) { //message 9
         if (courseHashMap.get(courseNumber) != null | !userConcurrentHashMap.get(username).getIsAdmin()) {
             Vector<Integer> courseList = userConcurrentHashMap.get(username).getKdamCoursesList();
             boolean isRegistered = courseList.contains(courseNumber);
@@ -196,6 +196,16 @@ import java.util.function.DoubleToIntFunction;
         } else {
             return "ERR";
         }
+    }
+
+    public String StudentsStats(String userName) { //message 8
+        String output = null;
+        User user = userConcurrentHashMap.get(userName);
+        if (user != null && user.getIsAdmin()) { //  only for admins
+            output= "Student:" + user.getUsername() +"\n";
+            output+= "Courses:" + user.getKdamCoursesList().toString() ;
+        }
+        return output;
     }
 }
 

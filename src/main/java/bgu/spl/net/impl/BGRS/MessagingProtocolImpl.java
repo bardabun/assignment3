@@ -6,14 +6,14 @@ import bgu.spl.net.impl.BGRS.messages.Error;
 
 public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
     private boolean shouldTerminate = false;
-    int opCode;
+    //when given logout - shouldterminate = true;  - > - like "bye" ..
     private String username;
-    private Error ERR = new Error();
+
     @Override
     public String process(String msg) {
-       // shouldTerminate ;
-        opCode = Integer.parseInt(msg.substring(1,2));
-        ERR.setOpCode(opCode);
+
+        int opCode = Integer.parseInt(msg.substring(1, 2));
+        Error ERR = new Error(opCode);
         String[] usernameAndPassword;
 
         switch (opCode) {
@@ -62,7 +62,7 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
                 return ERR.execute();
             case 8:
                 if(isThereClientLoggedIn())
-                    return new PrintStudentStatus(username, getCourseNumber(msg)).execute();
+                    return new PrintStudentStatus(username).execute();
 
                 return ERR.execute();
             case 9:
@@ -86,8 +86,7 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
 
     //Return the course number out of the message
     private int getCourseNumber(String msg){
-        int msgLen = opCode == 8 ? msg.length()-1 : msg.length();
-        return Integer.parseInt(msg.substring(2, msgLen));
+        return Integer.parseInt(msg.substring(2));
     }
 
     private boolean isThereClientLoggedIn() {

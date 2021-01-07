@@ -7,7 +7,7 @@ public class User {
     final private String password;
     private boolean isAdmin;
     private boolean isLoggedIn;
-    private Vector<Integer> KdamCoursesList;
+    private Vector<Integer> KdamCoursesList; //list of courses registered
 
     public User(String username, String password, boolean isAdmin) {
         this.username = username;
