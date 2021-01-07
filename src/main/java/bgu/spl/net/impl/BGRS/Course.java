@@ -27,11 +27,17 @@ public class Course {
         return courseNum;
     }
 
+
+
+    public Vector<Integer> getKdamCoursesList() {
+        return KdamCoursesList;
+    }
+
     public int getStudentsRegistered() {
         return studentsRegistered;
     }
 
-    public Vector<Integer> getKdamCoursesList() {
-        return KdamCoursesList;
+    public void setStudentsRegistered(int studentsRegistered) {
+        this.studentsRegistered = studentsRegistered;
     }
 }

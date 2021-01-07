@@ -66,13 +66,13 @@ import java.util.concurrent.ConcurrentHashMap;
              }
             else{
                 if( isAdmin) {
-                    User admin = new User(user, pass, true, kdamCoursesList);
+                    User admin = new User(user, pass, true);
                     userConcurrentHashMap.put(user, admin);
                     return true;
                 }
                 else //not admin
                 {
-                    User user1 = new User(user,pass,false, kdamCoursesList);
+                    User user1 = new User(user,pass,false);
                     userConcurrentHashMap.put(user, user1);
                     return true;
                 }
@@ -112,17 +112,22 @@ import java.util.concurrent.ConcurrentHashMap;
         if(!userReg.isLoggedIn())return false; //the user is not logged in
         if(toRegister==null)return false; //no such course is exist
         if(isFull(toRegister))return false; //there's no place in the course.
-        if( ! hasFinishedKdam(userReg,toRegister)) return false;
+        if( ! hasFinishedKdam(userReg,toRegister)) return false; //the student does not have all the Kdam courses
 
+        int numOfStudentRegistered = toRegister.getStudentsRegistered();
+        numOfStudentRegistered++;
+        toRegister.setStudentsRegistered(numOfStudentRegistered);
+        userReg.getKdamCoursesList().add(courseNum); //register to the course
 
     }
 
     private boolean hasFinishedKdam(User userReg, Course toRegister) {
-        Vector<Integer> kdamCourses = userReg.getKdamCoursesList();
-        for(Integer i: toRegister.getKdamCoursesList()){
-            if(kdamCourses)
-
+        Vector<Integer> userKdamCourses = userReg.getKdamCoursesList();
+        for(Integer i: toRegister.getKdamCoursesList()){ //go throw the kdam courses for the specific course
+            if(!userKdamCourses.contains(i))
+                return false;
         }
+        return true;
     }
 
     private boolean isFull(Course toRegister) {
