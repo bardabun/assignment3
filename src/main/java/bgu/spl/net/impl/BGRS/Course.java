@@ -19,4 +19,8 @@ public class Course {
     public int getNumOfMaxStudents() {
         return numOfMaxStudents;
     }
+
+    public int getCourseNum() {
+        return courseNum;
+    }
 }

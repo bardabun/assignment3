@@ -111,6 +111,8 @@ import java.util.concurrent.ConcurrentHashMap;
         if(!userReg.isLoggedIn())return false; //the user is not connected
         if(toRegister==null)return false; //no such course is exist
 
+
+
     }
 
 }

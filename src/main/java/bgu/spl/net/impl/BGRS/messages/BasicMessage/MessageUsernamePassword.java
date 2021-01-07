@@ -6,7 +6,7 @@ import bgu.spl.net.impl.BGRS.Database;
 public abstract  class MessageUsernamePassword {
     protected String userName;
     protected String pass;
-   // protected short opcode;
+    protected int opcode;
     protected Database DB=Database.getInstance();
     public MessageUsernamePassword(String username , String password){
         this.userName=username;

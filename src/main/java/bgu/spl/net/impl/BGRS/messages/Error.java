@@ -5,7 +5,7 @@ public class Error {
 
     public Error(){
         this.opCode = 0;
-    }
+    } //why do we need this ?
     public Error(int opCode){
         this.opCode = opCode;
     }
