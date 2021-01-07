@@ -10,10 +10,6 @@ public class Error {
         this.opCode = opCode;
     }
 
-    public int getOpCode() {
-        return opCode;
-    }
-
     public void setOpCode(int opCode) {
         this.opCode = opCode;
     }
