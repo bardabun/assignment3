@@ -1,18 +1,20 @@
 package bgu.spl.net.impl.BGRS.messages;
 
-import bgu.spl.net.impl.BGRS.Database;
-import bgu.spl.net.impl.BGRS.messages.BasicMessage.MessageUsername;
+import bgu.spl.net.impl.BGRS.messages.BasicMessage.MessageUsernameCourseumber;
 
-public class CheckIfRegistered extends MessageUsername {
-    private String username;
-    private int courseName;
-    private int opCode;
+public class CheckIfRegistered extends MessageUsernameCourseumber {
+
     public CheckIfRegistered(String username, int courseNumber) {
-
+        super(username, courseNumber);
+        opcode = 9;
     }
 
     @Override
     public String execute() {
-        return null;
+        String isRegisteredOutput = DB.isRegistered(userName, courseNumber);
+         if(isRegisteredOutput.equals("ERR"))
+             return new Error(opcode).execute();
+         else
+             return isRegisteredOutput;
     }
 }

@@ -147,9 +147,10 @@ import java.util.function.DoubleToIntFunction;
     //Return true if removed user registration from specific course
     public boolean unregisterToCourse(String username, int courseNumber){
             User user = userConcurrentHashMap.get(username);
-            if(!user.getIsAdmin()){
-                Integer removed = user.getKdamCoursesList().remove(courseNumber);
-                return removed .equals(courseNumber);
+            if(courseHashMap.get(courseNumber) != null | !user.getIsAdmin()){
+                Integer removedCourse = user.getKdamCoursesList().remove(courseNumber);
+                Vector<User> listOfStudents = courseHashMap.get(courseNumber).getListOfStudents();
+                return removedCourse.equals(courseNumber) & listOfStudents.remove(user);
             }
             return false;
     }
@@ -165,6 +166,19 @@ import java.util.function.DoubleToIntFunction;
         if(!user.getIsAdmin()) { //only student
                 output =  user.getKdamCoursesList().toString();
             }
-            return output;
+            return output;s
+    }
+
+    public String isRegistered(String username, int courseNumber) {
+            if (courseHashMap.get(courseNumber) != null | !userConcurrentHashMap.get(username).getIsAdmin()){
+                Vector<Integer> courseList = userConcurrentHashMap.get(username).getKdamCoursesList();
+                boolean isRegistered = courseList.contains(courseNumber);
+                if(isRegistered){
+                    courseList.remove(courseNumber);
+                    return "REGISTERED";
+                }
+                else {return "NOT REGISTERED";}
+            }
+            else{ return "ERR";}
     }
 }
