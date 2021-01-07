@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.DoubleToIntFunction;
 
 /**
      * Passive object representing the Database where all courses and users are stored.
@@ -123,7 +124,7 @@ import java.util.concurrent.ConcurrentHashMap;
         numOfStudentRegistered++;
         toRegister.setStudentsRegistered(numOfStudentRegistered);
         userReg.getKdamCoursesList().add(courseNum); //register to the course
-    return true;
+
     }
 
     private boolean hasFinishedKdam(User userReg, Course toRegister) {
@@ -138,18 +139,7 @@ import java.util.concurrent.ConcurrentHashMap;
     private boolean isFull(Course toRegister) {
             return (toRegister.getNumOfMaxStudents() - toRegister.getStudentsRegistered() == 0 ) ;
     }
-    //Return true if removed user registration from specific course
-    public boolean unregisterToCourse(String username, int courseNumber){
-            User user = userConcurrentHashMap.get(username);
-            if(!user.getIsAdmin()){
-                Integer removed = user.getKdamCoursesList().remove(courseNumber);
-                return removed .equals(courseNumber);
-            }
-            return false;
-    }
-    //Return user's course list
-    public String CheckMyCurrentCourses(String username) {
-        return userConcurrentHashMap.get(username).getKdamCoursesList().toString();
-    }
 
+
+    }
 }
