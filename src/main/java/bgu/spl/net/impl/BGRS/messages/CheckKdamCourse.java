@@ -1,19 +1,19 @@
 package bgu.spl.net.impl.BGRS.messages;
 
-import bgu.spl.net.impl.BGRS.messages.BasicMessage.MessageUsername;
+import bgu.spl.net.impl.BGRS.messages.BasicMessage.MessageUsernameCourseumber;
 
-public class CheckKdamCourse extends MessageUsername {
+public class CheckKdamCourse extends MessageUsernameCourseumber {
 
-    public CheckKdamCourse(String user) {
-        super(user);
+    public CheckKdamCourse(String username, int courseName) {
+        super(username, courseName);
         opcode=6;
     }
 
     @Override
     public String execute() {
-        String output = DB.kdamCheck(userName);
-        if(output!=null)
-            return new Acknowledgement(opcode,output).execute();
+        String output = DB.kdamCheck(courseNumber);
+        if(output != null)
+            return new Acknowledgement(opcode, output).execute();
         else
             return new Error(opcode).execute();
 

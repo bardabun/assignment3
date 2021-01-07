@@ -156,14 +156,12 @@ import java.util.function.DoubleToIntFunction;
         return userConcurrentHashMap.get(username).getKdamCoursesList().toString();
     }
 
-
-    public String kdamCheck(String userName) {
-        User user = userConcurrentHashMap.get(userName);
-        String output = null;
-        if (!user.getIsAdmin()) { //only for students
-            output = user.getKdamCoursesList().toString();
-        }
-        return output;
+    //Return Kdam course list of specific course number if exist, otherwise return null
+    public String kdamCheck(int courseNumber) {
+        Course course = courseHashMap.get(courseNumber);
+        if(course != null)
+            return course.getKdamCoursesList().toString();
+        return null;
     }
 
     public String CourseStats(String userName, int courseNumber) {
