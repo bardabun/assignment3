@@ -4,10 +4,7 @@ import bgu.spl.net.impl.BGRS.messages.Acknowledgement;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.Vector;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.DoubleToIntFunction;
 
@@ -27,11 +24,10 @@ import java.util.function.DoubleToIntFunction;
 
     //to prevent user from creating new Database
     private Database() {
-
         courseHashMap = new HashMap<>();
         userConcurrentHashMap = new ConcurrentHashMap<>();
 
-        initialize("Courses.txt");
+        initialize("/home/spl211/IdeaProjects/server/src/main/java/BGRSMain/Courses.txt");
 
     }
 
@@ -54,12 +50,14 @@ import java.util.function.DoubleToIntFunction;
     boolean initialize(String coursesFilePath) {
 
         try {
+
             File courseFile = new File(coursesFilePath);
             Scanner reader = new Scanner(courseFile);
+
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
-
                 String[] splitLine = line.split("\\|");
+
                 //Initiate course number, name and the number of max student of the course
                 int courseNumber = Integer.parseInt(splitLine[0]);
                 String courseName = splitLine[1];
@@ -68,14 +66,19 @@ import java.util.function.DoubleToIntFunction;
                 //Initiate Kdam courses vector
                 String[] stringKdamCourses = (splitLine[2].substring(1, splitLine[2].length()-1)).split(",");
                 Vector<Integer> kdamCourses = new Vector<>();
-                for(String courseNum : stringKdamCourses)
-                    kdamCourses.add(Integer.parseInt(courseNum));
+                if(stringKdamCourses.length > 1) {
+
+                    for (String courseNum : stringKdamCourses)
+                        kdamCourses.add(Integer.parseInt(courseNum));
+
+                }
 
                 //Embed the course to the hash map with the key represented by the course number
                 courseHashMap.put(courseNumber, new Course(courseNumber, courseName, kdamCourses, numOfMaxStudent));
 
             }
         } catch (FileNotFoundException e) {
+            System.out.println("You got a problem with your file path");
             return false;
         }
         return true;
