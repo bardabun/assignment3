@@ -59,11 +59,26 @@ import java.util.function.DoubleToIntFunction;
             while (reader.hasNextLine()) {
                 String line = reader.nextLine();
 
+                String[] splitLine = line.split("\\|");
+                //Initiate course number, name and the number of max student of the course
+                int courseNumber = Integer.parseInt(splitLine[0]);
+                String courseName = splitLine[1];
+                int numOfMaxStudent = Integer.parseInt(splitLine[3]);
+
+                //Initiate Kdam courses vector
+                String[] stringKdamCourses = (splitLine[2].substring(1, splitLine[2].length()-1)).split(",");
+                Vector<Integer> kdamCourses = new Vector<>();
+                for(String courseNum : stringKdamCourses)
+                    kdamCourses.add(Integer.parseInt(courseNum));
+
+                //Embed the course to the hash map with the key represented by the course number
+                courseHashMap.put(courseNumber, new Course(courseNumber, courseName, kdamCourses, numOfMaxStudent));
+
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            return false;
         }
-        return false;
+        return true;
     }
 
 

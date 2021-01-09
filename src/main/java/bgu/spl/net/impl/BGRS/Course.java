@@ -10,13 +10,13 @@ public class Course {
     private int numRegistered;
     private Vector<User> listOfStudents;
 
-    public Course(int courseNum, String courseName, Vector<Integer> kdamCoursesList, int numOfMaxStudents, int studentsRegistered) {
+    public Course(int courseNum, String courseName, Vector<Integer> kdamCoursesList, int numOfMaxStudents) {
         this.courseNum = courseNum;
         this.courseName = courseName;
         KdamCoursesList = kdamCoursesList;
         this.numOfMaxStudents = numOfMaxStudents;
         listOfStudents=new Vector<>();
-        this.numRegistered = studentsRegistered;
+        this.numRegistered = 0;
     }
 
     public int getNumOfMaxStudents() {
