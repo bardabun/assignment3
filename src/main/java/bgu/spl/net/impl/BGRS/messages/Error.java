@@ -10,6 +10,6 @@ public class Error {
 
 
     public String execute(){
-        return  "ERROR " + opCode;
+        return  "13" + opCode;
     }
 }
