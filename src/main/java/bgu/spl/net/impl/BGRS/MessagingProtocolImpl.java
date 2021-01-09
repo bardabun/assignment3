@@ -11,8 +11,9 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
 
     @Override
     public String process(String msg) {
-
+        System.out.print(msg);
         int opCode = Integer.parseInt(msg.substring(1, 2));
+
         Error ERR = new Error(opCode);
         String[] usernameAndPassword;
 
