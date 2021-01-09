@@ -72,15 +72,18 @@ import java.util.function.DoubleToIntFunction;
             //username already exists
             return false;
         } else {
-            if (isAdmin) {
-                User admin = new User(user, pass, true);
-                userConcurrentHashMap.put(user, admin);
-                return true;
-            } else //not admin
-            {
-                User user1 = new User(user, pass, false);
-                userConcurrentHashMap.put(user, user1);
-                return true;
+            synchronized (this) {
+
+                if (isAdmin) {
+                    User admin = new User(user, pass, true);
+                    userConcurrentHashMap.put(user, admin);
+                    return true;
+                } else //not admin
+                {
+                    User user1 = new User(user, pass, false);
+                    userConcurrentHashMap.put(user, user1);
+                    return true;
+                }
             }
         }
     }
@@ -102,8 +105,11 @@ import java.util.function.DoubleToIntFunction;
             //no such username || not logged in ..
             return false;
         } else {
-            logout.LogOut();
-            return true;
+            synchronized (this) {
+
+                logout.LogOut();
+                return true;
+            }
         }
     }
 
@@ -117,14 +123,15 @@ import java.util.function.DoubleToIntFunction;
         if (isFull(toRegister)) return false; //there's no place in the course.
         if (!hasFinishedKdam(userReg, toRegister)) return false; //the student does not have all the Kdam courses
 
-        int numOfStudentRegistered = toRegister.getNumRegistered();
-        numOfStudentRegistered++;
-        toRegister.setNumRegistered(numOfStudentRegistered);
-        toRegister.addUser(userReg);
-        userReg.getKdamCoursesList().add(courseNum); //register to the course
+        synchronized (this) {
+            int numOfStudentRegistered = toRegister.getNumRegistered();
+            numOfStudentRegistered++;
+            toRegister.setNumRegistered(numOfStudentRegistered);
+            toRegister.addUser(userReg);
+            userReg.getKdamCoursesList().add(courseNum); //register to the course
 
-
-        return true;
+            return true;
+        }
     }
 
     private boolean hasFinishedKdam(User userReg, Course toRegister) {
@@ -144,9 +151,12 @@ import java.util.function.DoubleToIntFunction;
     public boolean unregisterToCourse(String username, int courseNumber) {
         User user = userConcurrentHashMap.get(username);
         if (courseHashMap.get(courseNumber) != null | !user.getIsAdmin()) {
-            Integer removedCourse = user.getKdamCoursesList().remove(courseNumber);
-            Vector<User> listOfStudents = courseHashMap.get(courseNumber).getListOfStudents();
-            return removedCourse.equals(courseNumber) & listOfStudents.remove(user);
+
+            synchronized (this) {
+                Integer removedCourse = user.getKdamCoursesList().remove(courseNumber);
+                Vector<User> listOfStudents = courseHashMap.get(courseNumber).getListOfStudents();
+                return removedCourse.equals(courseNumber) & listOfStudents.remove(user);
+            }
         }
         return false;
     }
@@ -207,5 +217,6 @@ import java.util.function.DoubleToIntFunction;
         }
         return output;
     }
+
 }
 
