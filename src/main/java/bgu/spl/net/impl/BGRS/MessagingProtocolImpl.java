@@ -11,7 +11,7 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
 
     @Override
     public String process(String msg) {
-        System.out.print(msg);
+        System.out.println("MESSAGE RECIEVED ---->      " + msg);
         int opCode = Integer.parseInt(msg.substring(0,1));
 
         Error ERR = new Error(opCode);
@@ -42,9 +42,13 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
                 }
                 return ERR.execute();
             case 4:
-                if(isThereClientLoggedIn())
-                    return new LogoutRequest(username).execute();
-
+                if(isThereClientLoggedIn()) {
+                    String output = new LogoutRequest(username).execute();
+                    if(output.equals("12 4 ")) {
+                        username = null;
+                        return output;
+                    }
+                }
                 return ERR.execute();
             case 5:
                 if(isThereClientLoggedIn())
