@@ -10,7 +10,7 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
     private byte[] bytes = new byte[1 << 10]; //start with 1k
     private int len = 0;
     private int numOfZeros = 0;
-    private short opCode=0 ;
+    private short opCode = 0;
 
 
     @Override
@@ -30,9 +30,7 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
         else if ((opCode >= 5 & opCode <= 10 & opCode != 8 & len == 4)) {
             System.out.println(Arrays.toString(bytes));
             return popString();
-        }
-
-        else if (opCode == 8 & numOfZeros == 2)
+        } else if (opCode == 8 & numOfZeros == 2)
             return popString();
 
         return null;
@@ -42,14 +40,13 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
     private String popString() {
         String result;
 
-        if (opCode >= 5 & opCode <= 10){
+        if (opCode >= 5 & opCode <= 10) {
             byte[] bytesNum = new byte[2];
             bytesNum[0] = bytes[2];
             bytesNum[1] = bytes[3];
             short num = bytesToShort(bytesNum);
             result = String.valueOf(opCode) + " " + num;
-        }
-        else {
+        } else {
             String messageString = new String(bytes, 2, len, StandardCharsets.UTF_8);
             String[] splitMessage = messageString.split("\0");
             result = String.valueOf(opCode) + " ";
@@ -65,16 +62,15 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
     }
 
     private short bytesToShort(byte[] byteArr) {
-        short result = (short)((byteArr[0] & 0xff) << 8);
-        result += (short)(byteArr[1] & 0xff);
+        short result = (short) ((byteArr[0] & 0xff) << 8);
+        result += (short) (byteArr[1] & 0xff);
         return result;
     }
 
-    public byte[] shortToBytes(short num)
-    {
+    public byte[] shortToBytes(short num) {
         byte[] bytesArr = new byte[2];
-        bytesArr[0] = (byte)((num >> 8) & 0xFF);
-        bytesArr[1] = (byte)(num & 0xFF);
+        bytesArr[0] = (byte) ((num >> 8) & 0xFF);
+        bytesArr[1] = (byte) (num & 0xFF);
         return bytesArr;
     }
 
@@ -88,42 +84,58 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
 
     @Override
     public byte[] encode(String message) {
+        //12 2
+//        String ackOrErrorString = message.substring(0, 2);
+//        String messageOp= message.substring(2,4);
+//        short ackOrErrorr = Short.parseShort(ackOrErrorString);
+//        short messageOpcode= Short.parseShort(messageOp);
+//        String restOfMessage = message.substring(3);
+//        if (ackOrErrorr == 12) {//ack
+//            if((messageOpcode == 6 | messageOpcode == 7 | messageOpcode == 5 | messageOpcode == 9 |
+//                    messageOpcode == 11)){ //only 4 bytes
+//                byte[]opcode = shortToBytes(ackOrErrorr);
+//                byte[]messageop= shortToBytes(messageOpcode);
+//                byte[]output = new byte[4];
+//                System.arraycopy(opcode,0,output,0,2);
+//                System.arraycopy(messageop,0,output,2,2);
+//                return output;
+//            }
+//            else{if(messageOpcode=)
+//
+//            }
+//
+//
+//        } else { //ERROR
+//            byte[] output = message.getBytes(StandardCharsets.UTF_8);
+//            System.out.println();
+//            return output;
+//        }
 
-        String[] splitMessage = message.split(" ");
-        short opCode = Short.parseShort(splitMessage[1]);
-        byte[] ackOrError = shortToBytes(Short.parseShort(splitMessage[0]));
-        byte[] opCodeMessage = shortToBytes(Short.parseShort(splitMessage[1]));
+
+        String[] splitMessage = message.split(" ");// split between spaces
+        short MessageOpCode = Short.parseShort(splitMessage[1]);
+        short ackError = Short.parseShort(splitMessage[0]);
+        byte[] ackOrError = shortToBytes(ackError);
+        byte[] ByteOpCodeMessage = shortToBytes(MessageOpCode);
         byte[] optional = null;
+        if (ackError == 12) {//ack
+            if (MessageOpCode == 6 | MessageOpCode == 7 | MessageOpCode == 8 | MessageOpCode == 9 | MessageOpCode == 11) {
 
-        if(splitMessage.length > 2) {
-            if(opCode == 6){
-                String noParenthesis = splitMessage[2].substring(1, splitMessage.length);
-                String[] kdamCourses = noParenthesis.split(",");
-
-                byte[][] kdamCourseBytes = new byte[kdamCourses.length][];
-                if(!kdamCourses[0].equals("")) {
-                    int index = 0;
-                    for (String courseNum : kdamCourses)
-                        kdamCourseBytes[index++] = shortToBytes(Short.parseShort(courseNum));
-
-                }
-                optional= shortToBytes(Short.parseShort(splitMessage[2]));
+                optional = ( splitMessage[2] + "\0").getBytes(StandardCharsets.UTF_8);
                 System.out.println("optional1 -->  " + Arrays.toString(optional));
             }
-            else {
-                optional = ("\0" + splitMessage[2] + "\0").getBytes();
-                System.out.println("optional -->  " + Arrays.toString(optional));
-            }
         }
-        byte[] messageByte = new byte[ackOrError.length + opCodeMessage.length];
-        System.arraycopy(ackOrError, 0, messageByte, 0, ackOrError.length);
-        System.arraycopy(opCodeMessage, 0, messageByte, ackOrError.length, opCodeMessage.length);
 
-        if(optional != null){
+        //append 4 bytes
+        byte[] messageByte = new byte[ackOrError.length + ByteOpCodeMessage.length];
+        System.arraycopy(ackOrError, 0, messageByte, 0, ackOrError.length);
+        System.arraycopy(ByteOpCodeMessage, 0, messageByte, ackOrError.length, ByteOpCodeMessage.length);
+
+
+        if (optional != null) {
             byte[] result = new byte[messageByte.length + optional.length];
             System.arraycopy(messageByte, 0, result, 0, messageByte.length);
             System.arraycopy(optional, 0, result, messageByte.length, optional.length);
-
             System.out.println("result -->  " + Arrays.toString(result));
 
             return result;
