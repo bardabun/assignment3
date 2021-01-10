@@ -84,7 +84,7 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
         System.arraycopy(ackOrError, 0, messageByte, 0, ackOrError.length);
         System.arraycopy(opCodeMessage, 0, messageByte, ackOrError.length, opCodeMessage.length);
 
-        if(optional != null) {
+        if(optional != null){
             byte[] result = new byte[messageByte.length + optional.length];
             System.arraycopy(messageByte, 0, result, 0, messageByte.length);
             System.arraycopy(optional, 0, result, messageByte.length, optional.length);
