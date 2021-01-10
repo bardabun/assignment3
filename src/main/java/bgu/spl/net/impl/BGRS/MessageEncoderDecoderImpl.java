@@ -84,35 +84,19 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
 
     @Override
     public byte[] encode(String message) {
-        //12 2
-//        String ackOrErrorString = message.substring(0, 2);
-//        String messageOp= message.substring(2,4);
-//        short ackOrErrorr = Short.parseShort(ackOrErrorString);
-//        short messageOpcode= Short.parseShort(messageOp);
-//        String restOfMessage = message.substring(3);
-//        if (ackOrErrorr == 12) {//ack
-//            if((messageOpcode == 6 | messageOpcode == 7 | messageOpcode == 5 | messageOpcode == 9 |
-//                    messageOpcode == 11)){ //only 4 bytes
-//                byte[]opcode = shortToBytes(ackOrErrorr);
-//                byte[]messageop= shortToBytes(messageOpcode);
-//                byte[]output = new byte[4];
-//                System.arraycopy(opcode,0,output,0,2);
-//                System.arraycopy(messageop,0,output,2,2);
-//                return output;
-//            }
-//            else{if(messageOpcode=)
-//
-//            }
-//
-//
-//        } else { //ERROR
-//            byte[] output = message.getBytes(StandardCharsets.UTF_8);
-//            System.out.println();
-//            return output;
-//        }
+        String[] splitMessage = new String[3];
+        splitMessage[0] = message.substring(0,2);
+        String a;
+        if(message.charAt(2)!=' ')
+            a=message.substring(2,4);
+        else
+            a=message.substring(3,4);
 
+        splitMessage[1]=a;
+        splitMessage[2]=message.substring(5);
+        System.out.println(splitMessage[0]+"----"+splitMessage[1]+"-------"+splitMessage[2] );
 
-        String[] splitMessage = message.split(" ");// split between spaces
+        //String[] splitMessage = message.split(" ");// split between spaces
         short MessageOpCode = Short.parseShort(splitMessage[1]);
         short ackError = Short.parseShort(splitMessage[0]);
         byte[] ackOrError = shortToBytes(ackError);
