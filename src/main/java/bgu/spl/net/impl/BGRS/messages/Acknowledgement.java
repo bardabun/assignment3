@@ -6,7 +6,9 @@ public class Acknowledgement {
 
 
     public Acknowledgement(int opCode){
+
         this.opCode = opCode;
+        this.message = "";
     }
 
     public Acknowledgement(int opCode, String message){

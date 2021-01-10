@@ -12,7 +12,7 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
     @Override
     public String process(String msg) {
         System.out.print(msg);
-        int opCode = Integer.parseInt(msg.substring(1, 2));
+        int opCode = Integer.parseInt(msg.substring(0,1));
 
         Error ERR = new Error(opCode);
         String[] usernameAndPassword;
@@ -21,23 +21,23 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
             case 1:
                 if(!isThereClientLoggedIn()) {
                     usernameAndPassword = getUserNameOrPassword(msg);
-                    AdminRegister admin = new AdminRegister(usernameAndPassword[0], usernameAndPassword[1]);
+                    AdminRegister admin = new AdminRegister(usernameAndPassword[1], usernameAndPassword[2]);
                     return admin.execute();
                 }
                 return ERR.execute();
             case 2:
                 if(!isThereClientLoggedIn()) {
                     usernameAndPassword = getUserNameOrPassword(msg);
-                    StudentRegister student = new StudentRegister(usernameAndPassword[0], usernameAndPassword[1]);
+                    StudentRegister student = new StudentRegister(usernameAndPassword[1], usernameAndPassword[2]);
                     return student.execute();
                 }
                 return ERR.execute();
             case 3:
                 if(!isThereClientLoggedIn()) {
                     usernameAndPassword = getUserNameOrPassword(msg);
-                    LoginRequest loginToSystem = new LoginRequest(usernameAndPassword[0], usernameAndPassword[1]);
+                    LoginRequest loginToSystem = new LoginRequest(usernameAndPassword[1], usernameAndPassword[2]);
                     String isLoggedIn = loginToSystem.execute();
-                    this.username = isLoggedIn.equals("123") ? usernameAndPassword[0] : null;     //<---is there a better condition?
+                    this.username = isLoggedIn.equals("123") ? usernameAndPassword[1] : null;     //<---is there a better condition?
                     return isLoggedIn;
                 }
                 return ERR.execute();
@@ -95,11 +95,7 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
     }
     //Return an array of username and password that client sent to the server
     private String[] getUserNameOrPassword(String msg){
-        String[] userNameAndPassword = new String[2];
-        userNameAndPassword[0] = msg.substring(2,msg.indexOf(0,2)); //<---~if I have an issue with this line check that~ "ch:" input should be- Unicode code point
-        userNameAndPassword[1] = msg.substring(2 + userNameAndPassword[0].length(), msg.length()-1);
-
-        return userNameAndPassword;
+        return msg.split(" ");
     }
 
     @Override

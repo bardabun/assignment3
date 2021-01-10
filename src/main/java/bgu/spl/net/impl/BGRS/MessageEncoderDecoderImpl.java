@@ -38,7 +38,11 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
 
 
     private String popString() {
-        String result = new String(bytes, 0, len, StandardCharsets.UTF_8);
+        String messageString = new String(bytes, 2, len, StandardCharsets.UTF_8);
+        String[] splitMessage = messageString.split("\0");
+        String result = String.valueOf(opCode) + " ";
+        for(String curr : splitMessage)
+            result += curr + " ";
         len = 0;
         opCode=0;
         return result;
@@ -60,7 +64,7 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
 
     @Override
     public byte[] encode(String message) {
-
-        return (message + "\0").getBytes();
+        byte[] x = (message + "\0").getBytes();
+        return x;
     }
 }
