@@ -44,7 +44,9 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
         for(String curr : splitMessage)
             result += curr + " ";
         len = 0;
-        opCode=0;
+        opCode = 0;
+        numOfZeros = 0;
+
         return result;
     }
 

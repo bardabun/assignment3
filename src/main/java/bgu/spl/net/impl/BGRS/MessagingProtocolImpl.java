@@ -37,7 +37,7 @@ public class MessagingProtocolImpl<T> implements MessagingProtocol<String> {
                     usernameAndPassword = getUserNameOrPassword(msg);
                     LoginRequest loginToSystem = new LoginRequest(usernameAndPassword[1], usernameAndPassword[2]);
                     String isLoggedIn = loginToSystem.execute();
-                    this.username = isLoggedIn.equals("123") ? usernameAndPassword[1] : null;     //<---is there a better condition?
+                    this.username = isLoggedIn.equals("12 3 ") ? usernameAndPassword[1] : null;     //<---is there a better condition?
                     return isLoggedIn;
                 }
                 return ERR.execute();
