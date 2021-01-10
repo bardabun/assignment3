@@ -222,7 +222,7 @@ import java.util.function.DoubleToIntFunction;
             Vector<Integer> courseList = userConcurrentHashMap.get(username).getKdamCoursesList();
             boolean isRegistered = courseList.contains(courseNumber);
             if (isRegistered) {
-                courseList.remove(courseNumber);
+                //courseList.remove(courseNumber);
                 return "REGISTERED";
             } else {
                 return "NOT REGISTERED";

@@ -15,6 +15,6 @@ public class CheckIfRegistered extends MessageUsernameCourseumber {
          if(isRegisteredOutput.equals("ERR"))
              return new Error(opcode).execute();
          else
-             return isRegisteredOutput;
+             return new Acknowledgement(opcode, isRegisteredOutput).execute();
     }
 }

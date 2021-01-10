@@ -120,7 +120,7 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
         byte[] optional = null;
         if (ackError == 12) {//ack
             if (MessageOpCode == 6 | MessageOpCode == 7 | MessageOpCode == 8 | MessageOpCode == 9 | MessageOpCode == 11) {
-
+                System.out.println("dabun ya sharmutaaaaa - ze baror ?? :" + splitMessage[2]);
                 optional = ( splitMessage[2] + "\0").getBytes(StandardCharsets.UTF_8);
                 System.out.println("optional1 -->  " + Arrays.toString(optional));
             }
