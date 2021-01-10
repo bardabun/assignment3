@@ -12,6 +12,7 @@ public class CheckKdamCourse extends MessageUsernameCourseumber {
     @Override
     public String execute() {
         String output = DB.kdamCheck(courseNumber);
+        System.out.println("IN KDAM CHECK LIST ----> " + output);
         if(output != null)
             return new Acknowledgement(opcode, output).execute();
         else
