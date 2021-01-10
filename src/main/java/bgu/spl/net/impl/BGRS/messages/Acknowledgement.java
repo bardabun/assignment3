@@ -18,6 +18,6 @@ public class Acknowledgement {
     }
 
     public String execute(){
-        return  "12" + opCode + message;
+        return  "12" + " " + opCode + " " + message;
     }
 }

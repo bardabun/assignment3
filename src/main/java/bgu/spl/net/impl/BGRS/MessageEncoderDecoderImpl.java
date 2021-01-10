@@ -72,16 +72,25 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
 
     @Override
     public byte[] encode(String message) {
-        short opCode = Short.parseShort(message.substring(0,2) + "\0");
-        byte[] opCodeBytes = shortToBytes(opCode);
-        byte[] restMessageBytes = (message.substring(2)).getBytes();
-        //byte[] x = ("\0" + message + "\0").getBytes();
 
-        byte[] messageByte = new byte[opCodeBytes.length + restMessageBytes.length];
-        System.arraycopy(opCodeBytes, 0, messageByte, 0, opCodeBytes.length);
-        System.arraycopy(restMessageBytes, 0, messageByte, opCodeBytes.length, restMessageBytes.length);
+        String[] splitMessage = message.split(" ");
+        byte[] ackOrError = shortToBytes(Short.parseShort(splitMessage[0]));
+        byte[] opCodeMessage = shortToBytes(Short.parseShort(splitMessage[1]));
+        byte[] optional = null;
+        if(splitMessage.length > 2)
+            optional = ("\0" + splitMessage[2] + "\0").getBytes();
 
+        byte[] messageByte = new byte[ackOrError.length + opCodeMessage.length];
+        System.arraycopy(ackOrError, 0, messageByte, 0, ackOrError.length);
+        System.arraycopy(opCodeMessage, 0, messageByte, ackOrError.length, opCodeMessage.length);
 
+        if(optional != null) {
+            byte[] result = new byte[messageByte.length + optional.length];
+            System.arraycopy(messageByte, 0, result, 0, messageByte.length);
+            System.arraycopy(optional, 0, result, messageByte.length, optional.length);
+
+            return result;
+        }
         return messageByte;
     }
 }
