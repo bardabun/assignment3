@@ -54,6 +54,14 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
         return result;
     }
 
+    public byte[] shortToBytes(short num)
+    {
+        byte[] bytesArr = new byte[2];
+        bytesArr[0] = (byte)((num >> 8) & 0xFF);
+        bytesArr[1] = (byte)(num & 0xFF);
+        return bytesArr;
+    }
+
     private void pushByte(byte nextByte) {
         if (len >= bytes.length) {
             bytes = Arrays.copyOf(bytes, len * 2);
@@ -64,7 +72,16 @@ public class MessageEncoderDecoderImpl<T> implements MessageEncoderDecoder<Strin
 
     @Override
     public byte[] encode(String message) {
-        byte[] x = (message + "\0").getBytes();
-        return x;
+        short opCode = Short.parseShort(message.substring(0,2) + "\0");
+        byte[] opCodeBytes = shortToBytes(opCode);
+        byte[] restMessageBytes = (message.substring(2)).getBytes();
+        //byte[] x = ("\0" + message + "\0").getBytes();
+
+        byte[] messageByte = new byte[opCodeBytes.length + restMessageBytes.length];
+        System.arraycopy(opCodeBytes, 0, messageByte, 0, opCodeBytes.length);
+        System.arraycopy(restMessageBytes, 0, messageByte, opCodeBytes.length, restMessageBytes.length);
+
+
+        return messageByte;
     }
 }
